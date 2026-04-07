@@ -1,5 +1,3 @@
-import os
-import time
 import ipaddress
 import platform
 import re
@@ -21,7 +19,14 @@ _CONTROL_CHARS = re.compile(r"[\x00-\x1F\x7F]")
 # Фильтр XSS/JS
 _UNSAFE_PAYLOAD = re.compile(r"(<|>|javascript:|%3c|%3e|<\s*script|\bon\w+\s*=)", re.IGNORECASE)
 
-engine = create_engine(settings.database_url, pool_pre_ping=True)
+if settings.database_url.startswith("sqlite+pysqlite:///"):
+    engine = create_engine(
+        settings.database_url,
+        pool_pre_ping=True,
+        connect_args={"check_same_thread": False},
+    )
+else:
+    engine = create_engine(settings.database_url, pool_pre_ping=True)
 
 app = FastAPI()
 

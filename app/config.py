@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     app_locale: str = Field(default="ru", validation_alias="APP_LOCALE")
     app_timezone: str = Field(default="Europe/Moscow", validation_alias="APP_TIMEZONE")
-    database_url: str = Field(validation_alias="DATABASE_URL")
+    database_url: str = Field(default="sqlite+pysqlite:///./app.db", validation_alias="DATABASE_URL")
 
     @field_validator("app_locale")
     @classmethod
@@ -46,8 +46,8 @@ class Settings(BaseSettings):
             raise ValueError("DATABASE_URL must not be empty.")
         if _UNSAFE_PAYLOAD.search(normalized):
             raise ValueError("DATABASE_URL contains unsafe characters.")
-        if not normalized.startswith("postgresql+psycopg://"):
-            raise ValueError("DATABASE_URL must start with postgresql+psycopg://")
+        if not normalized.startswith("sqlite+pysqlite:///"):
+            raise ValueError("DATABASE_URL must start with sqlite+pysqlite:///")
         return normalized
 
 settings = Settings()
