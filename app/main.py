@@ -13,7 +13,7 @@ from app.dto.server_info import ServerInfoDTO
 from app.services.database_info_service import load_database_info
 
 
-MAX_USER_AGENT_LENGTH = 255
+MAX_USER_AGENT_LENGTH = 8192
 # Фильтьр управляющих символов
 _CONTROL_CHARS = re.compile(r"[\x00-\x1F\x7F]")
 # Фильтр XSS/JS
